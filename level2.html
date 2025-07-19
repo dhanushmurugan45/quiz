@@ -238,13 +238,9 @@
       if (event.key === "Enter") {
         if (userAnswer === correctAnswer) {
           document.body.style.backgroundColor = "green";
-
           // ✅ UNLOCK LEVEL 3
           localStorage.setItem("level", 3);
-
-          setTimeout(() => {
-            window.location.href = "level3.html";
-          }, 2000);
+          window.location.href = "level3.html";
         } else {
           document.body.style.backgroundColor = "red";
         }
