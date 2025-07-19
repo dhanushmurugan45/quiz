@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +20,6 @@
       height: 100vh;
       flex-wrap: wrap;
     }
-
     .container {
       display: flex;
       flex-direction: row;
@@ -28,7 +28,6 @@
       justify-content: space-between;
       padding: 10px;
     }
-
     .clues-column {
       width: 25%;
       display: flex;
@@ -36,7 +35,6 @@
       gap: 6px;
       justify-content: center;
     }
-
     .clues-column button {
       flex: 1 0 30%;
       padding: 8px;
@@ -46,19 +44,16 @@
       cursor: pointer;
       background-color: hsl(calc(360 * var(--i) / 100), 70%, 60%);
     }
-
     .quiz-box {
       flex: 1;
       text-align: center;
       padding: 20px;
       max-width: 500px;
     }
-
     .quiz-box h2 {
       margin-bottom: 20px;
       font-size: 20px;
     }
-
     input[type="text"] {
       padding: 12px;
       font-size: 16px;
@@ -66,14 +61,12 @@
       border-radius: 8px;
       border: none;
     }
-
     #clue-display {
       margin-top: 15px;
       font-size: 14px;
       color: yellow;
       min-height: 40px;
     }
-
     @media (max-width: 768px) {
       body {
         flex-direction: column;
@@ -99,25 +92,20 @@
 <body>
   <div class="container">
     <div class="clues-column" id="left-clues"></div>
-
     <div class="quiz-box">
       <h2>
-        INTHA STORY EN LIFE EEH MATHIRUCHU ITHUKKU APRM THAN NAN NALLA IRUNTHAN,
+        INTHA STORY EN LIFE EEH MATHIRUCHU ITHUKKU APRM THAN NAN NALLA IRUNTHAN,<br>
         LALITA IRUKKA ENAKKU AVALA PUDIKKUM, YEN NU UNAKKE THERIYUM<br>
         AVA ENKOODA 1 WEEK THAN PESUNA APRM FIGHT , YEN ANTHA FIGHT ONE WORD DEFINE PANNU
       </h2>
       <input type="text" id="answer" placeholder="Type your answer here" oninput="resetBackground()">
       <div id="clue-display"></div>
     </div>
-
     <div class="clues-column" id="right-clues"></div>
   </div>
-
   <script>
     const correctAnswer = "cringe boy";
     const totalButtons = 100;
-    const correctIndex = 44;
-
     const clueTexts = [
       "Clue 1: [vaa di va vera clue paru ]",
       "Clue 2: [vera clue vera poi thedanum line aaah illa ethukkum 69 la paru]",
@@ -163,7 +151,7 @@
       "Clue 42: [Type clue here]",
       "Clue 43: [Type clue here]",
       "Clue 44: [Type clue here]",
-      "ROMBA KASTA PATTU KANDU PUDICHA THANA ANA APDI ORU CLUE ILLA", 
+      "ROMBA KASTA PATTU KANDU PUDICHA THANA ANA APDI ORU CLUE ILLA",
       "Clue 46: [Type clue here]",
       "Clue 47: [Type clue here]",
       "Clue 48: [Type clue here]",
@@ -220,16 +208,13 @@
       "Clue 99: [Type clue here]",
       "Clue 100: [Type clue here]",
     ];
-
     const leftClues = document.getElementById("left-clues");
     const rightClues = document.getElementById("right-clues");
     const clueDisplay = document.getElementById("clue-display");
     const answerInput = document.getElementById("answer");
-
     function resetBackground() {
       document.body.style.backgroundColor = "black";
     }
-
     answerInput.addEventListener("keyup", function (event) {
       const userAnswer = answerInput.value.trim().toLowerCase();
       if (userAnswer === "") {
@@ -246,7 +231,6 @@
         }
       }
     });
-
     for (let i = 0; i < totalButtons; i++) {
       const btn = document.createElement("button");
       btn.textContent = `Clue ${i + 1}`;
