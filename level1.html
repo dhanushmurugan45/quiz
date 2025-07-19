@@ -1,0 +1,111 @@
+<!-- level1.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Level 1 | Mookie Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+      font-family: 'Arial Black', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      transition: background-color 0.5s ease;
+    }
+
+    .container {
+      background-color: rgba(255, 0, 0, 0.9);
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      width: 90%;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: white;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: lightgray;
+    }
+
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: rgb(21, 0, 255);
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 16px;
+      }
+
+      input, button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>RECENT AAH THAN GOT PATHAN ATHULA ENAKKU PUDICHATHU ETHU</h1>
+  <input type="text" id="answer" placeholder="Type your answer here" />
+  <br />
+  <button onclick="checkAnswer()">Submit</button>
+  <p id="result"></p>
+</div>
+
+<script>
+  function checkAnswer() {
+    const input = document.getElementById("answer").value.trim().toLowerCase();
+    const result = document.getElementById("result");
+
+    if (input === "missandei") {
+      document.body.style.backgroundColor = "green";
+      result.textContent = "Correct!";
+      localStorage.setItem("level", 2); // unlock level 2
+      setTimeout(() => {
+        window.location.href = "level2.html";
+      }, 2000);
+    } else {
+      document.body.style.backgroundColor = "red";
+      result.textContent = "thappu dii .";
+    }
+  }
+</script>
+
+</body>
+</html>

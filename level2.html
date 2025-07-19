@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Level 2 | Mookie Quest</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      font-family: Arial, sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-wrap: wrap;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      max-width: 1200px;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .clues-column {
+      width: 25%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .clues-column button {
+      flex: 1 0 30%;
+      padding: 8px;
+      font-size: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background-color: hsl(calc(360 * var(--i) / 100), 70%, 60%);
+    }
+
+    .quiz-box {
+      flex: 1;
+      text-align: center;
+      padding: 20px;
+      max-width: 500px;
+    }
+
+    .quiz-box h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      font-size: 16px;
+      width: 90%;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #clue-display {
+      margin-top: 15px;
+      font-size: 14px;
+      color: yellow;
+      min-height: 40px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 20px 10px;
+      }
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .clues-column {
+        width: 100%;
+        flex-wrap: wrap;
+        flex-direction: row;
+        gap: 5px;
+      }
+      .quiz-box {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="clues-column" id="left-clues"></div>
+
+    <div class="quiz-box">
+      <h2>
+        INTHA STORY EN LIFE EEH MATHIRUCHU ITHUKKU APRM THAN NAN NALLA IRUNTHAN,
+        LALITA IRUKKA ENAKKU AVALA PUDIKKUM, YEN NU UNAKKE THERIYUM<br>
+        AVA ENKOODA 1 WEEK THAN PESUNA APRM FIGHT , YEN ANTHA FIGHT ONE WORD DEFINE PANNU
+      </h2>
+      <input type="text" id="answer" placeholder="Type your answer here" oninput="resetBackground()">
+      <div id="clue-display"></div>
+    </div>
+
+    <div class="clues-column" id="right-clues"></div>
+  </div>
+
+  <script>
+    const correctAnswer = "cringe boy";
+    const totalButtons = 100;
+    const correctIndex = 44; // Button 45 (index 44) is correct
+
+    const clueTexts = [
+      "Clue 1: [vaa di va vera clue paru ]",
+      "Clue 2: [vera clue vera poi thedanum line aaah illa ethukkum 69 la paru]",
+      "Clue 3: [vera clue podi]",
+      "Clue 4: [vadi en thangamey clue venumaah]",
+      "Clue 5: [five la onnum irukathu ]",
+      "Clue 6: [five laya illa 6 mattum]",
+      "Clue 7: [ana 7 apdi illa]",
+      "Clue 8: [Type clue here]",
+      "Clue 9: [Type clue here]",
+      "Clue 10: [Type clue here]",
+      "Clue 11: [Type clue here]",
+      "Clue 12: [Type clue here]",
+      "Clue 13: [Type clue here]",
+      "Clue 14: [Type clue here]",
+      "Clue 15: [Type clue here]",
+      "Clue 16: [Type clue here]",
+      "Clue 17: [Type clue here]",
+      "Clue 18: [Type clue here]",
+      "Clue 19: [Type clue here]",
+      "Clue 20: [Type clue here]",
+      "Clue 21: [Type clue here]",
+      "Clue 22: [Type clue here]",
+      "Clue 23: [Type clue here]",
+      "Clue 24: [Type clue here]",
+      "Clue 25: [Type clue here]",
+      "Clue 26: [Type clue here]",
+      "Clue 27: [Type clue here]",
+      "Clue 28: [Type clue here]",
+      "Clue 29: [Type clue here]",
+      "Clue 30: [Type clue here]",
+      "Clue 31: [Type clue here]",
+      "Clue 32: [Type clue here]",
+      "Clue 33: [Type clue here]",
+      "Clue 34: [Type clue here]",
+      "Clue 35: [Type clue here]",
+      "Clue 36: [Type clue here]",
+      "Clue 37: [Type clue here]",
+      "Clue 38: [Type clue here]",
+      "Clue 39: [Type clue here]",
+      "Clue 40: [Type clue here]",
+      "Clue 41: [Type clue here]",
+      "Clue 42: [Type clue here]",
+      "Clue 43: [Type clue here]",
+      "Clue 44: [Type clue here]",
+      "ROMBA KASTA PATTU KANDU PUDICHA THANA ANA APDI ORU CLUE ILLA", // ← Button 45 correct clue
+      "Clue 46: [Type clue here]",
+      "Clue 47: [Type clue here]",
+      "Clue 48: [Type clue here]",
+      "Clue 49: [Type clue here]",
+      "Clue 50: [Type clue here]",
+      "Clue 51: [Type clue here]",
+      "Clue 52: [Type clue here]",
+      "Clue 53: [Type clue here]",
+      "Clue 54: [Type clue here]",
+      "Clue 55: [Type clue here]",
+      "Clue 56: [Type clue here]",
+      "Clue 57: [Type clue here]",
+      "Clue 58: [Type clue here]",
+      "Clue 59: [Type clue here]",
+      "Clue 60: [Type clue here]",
+      "Clue 61: [Type clue here]",
+      "Clue 62: [Type clue here]",
+      "Clue 63: [Type clue here]",
+      "Clue 64: [Type clue here]",
+      "Clue 65: [Type clue here]",
+      "Clue 66: [Type clue here]",
+      "Clue 67: [Type clue here]",
+      "Clue 68: [Type clue here]",
+      "Clue 69: [nan oru aal nu nan solratha seiru aah]",
+      "Clue 70: [Type clue here]",
+      "Clue 71: [Type clue here]",
+      "Clue 72: [Type clue here]",
+      "Clue 73: [Type clue here]",
+      "Clue 74: [Type clue here]",
+      "Clue 75: [Type clue here]",
+      "Clue 76: [Type clue here]",
+      "Clue 77: [Type clue here]",
+      "Clue 78: [Type clue here]",
+      "Clue 79: [Type clue here]",
+      "Clue 80: [Type clue here]",
+      "Clue 81: [Type clue here]",
+      "Clue 82: [Type clue here]",
+      "Clue 83: [Type clue here]",
+      "Clue 84: [Type clue here]",
+      "Clue 85: [Type clue here]",
+      "Clue 86: [Type clue here]",
+      "Clue 87: [Type clue here]",
+      "Clue 88: [Type clue here]",
+      "Clue 89: [Type clue here]",
+      "Clue 90: [Type clue here]",
+      "Clue 91: [Type clue here]",
+      "Clue 92: [Type clue here]",
+      "Clue 93: [Type clue here]",
+      "Clue 94: [Type clue here]",
+      "Clue 95: [Type clue here]",
+      "Clue 96: [Type clue here]",
+      "Clue 97: [Type clue here]",
+      "Clue 98: [Type clue here]",
+      "Clue 99: [Type clue here]",
+      "Clue 100: [Type clue here]",
+    ];
+
+    const leftClues = document.getElementById("left-clues");
+    const rightClues = document.getElementById("right-clues");
+    const clueDisplay = document.getElementById("clue-display");
+    const answerInput = document.getElementById("answer");
+
+    function resetBackground() {
+      document.body.style.backgroundColor = "black";
+    }
+
+    answerInput.addEventListener("keyup", function (event) {
+      const userAnswer = answerInput.value.trim().toLowerCase();
+      if (userAnswer === "") {
+        document.body.style.backgroundColor = "black";
+      }
+      if (event.key === "Enter") {
+        if (userAnswer === correctAnswer) {
+          document.body.style.backgroundColor = "green";
+          setTimeout(() => {
+            window.location.href = "level3.html";
+          }, 2000);
+        } else {
+          document.body.style.backgroundColor = "red";
+        }
+      }
+    });
+
+    for (let i = 0; i < totalButtons; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = `Clue ${i + 1}`;
+      btn.style.setProperty('--i', i);
+      btn.onclick = () => {
+        clueDisplay.textContent = clueTexts[i];
+      };
+      if (i < totalButtons / 2) {
+        leftClues.appendChild(btn);
+      } else {
+        rightClues.appendChild(btn);
+      }
+    }
+  </script>
+</body>
+</html>
