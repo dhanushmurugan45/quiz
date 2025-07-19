@@ -11,29 +11,29 @@
     }
 
     body {
-      background-color: black;
-      color: white;
+      background-color: #000;
+      color: #fff;
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
       transition: background-color 0.3s ease;
     }
 
     .container {
       text-align: center;
+      padding: 20px;
       max-width: 800px;
       width: 100%;
-      padding: 20px;
     }
 
     h2 {
-      margin-top: 30px;
-      font-size: 18px;
+      font-size: 20px;
+      margin-bottom: 20px;
     }
 
     input[type="text"] {
@@ -41,9 +41,10 @@
       font-size: 16px;
       width: 80%;
       max-width: 400px;
-      border-radius: 8px;
+      border-radius: 6px;
       border: none;
-      margin: 15px 0;
+      outline: none;
+      margin-bottom: 15px;
     }
 
     .submit-btn {
@@ -51,7 +52,7 @@
       font-size: 16px;
       font-weight: bold;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       background-color: white;
       color: black;
@@ -63,22 +64,22 @@
 
     #message {
       margin-top: 10px;
-      color: yellow;
       font-weight: bold;
+      color: yellow;
     }
 
-    .clue-box {
+    .clue-container {
+      display: flex;
+      justify-content: center;
       margin-top: 30px;
-      padding: 10px;
     }
 
     .clue-button {
-      padding: 10px 16px;
-      font-size: 14px;
-      background-color: red;
+      background-color: #e60000;
       color: white;
       border: none;
       border-radius: 6px;
+      padding: 10px 18px;
       cursor: pointer;
     }
 
@@ -91,9 +92,14 @@
         font-size: 16px;
       }
 
-      input,
+      input[type="text"],
       .submit-btn {
         font-size: 14px;
+      }
+
+      .clue-button {
+        font-size: 13px;
+        padding: 8px 12px;
       }
     }
   </style>
@@ -110,17 +116,18 @@
 
   <div class="container">
     <h2>
-      NAN HANISHA KITA PESNA NAL IRUNTHHU PERIYA SANDA LAM VANTHATHU ILLA ANA ORU NAL VANTHUCHU<br>
-      ATHANALA THAN EN NELAMA IPDI IRUKKU (YAR ANTHA TWO PERSON)
+      NAN HANISHA KITA PESNA NAL IRUNTHHU PERIYA SANDA LAM VANTHATHU ILLA<br>
+      ANA ORU NAL VANTHUCHU ATHANALA THAN EN NELAMA IPDI IRUKKU<br>
+      (YAR ANTHA TWO PERSON)
     </h2>
 
-    <input type="text" id="answer" placeholder="Type both names..." oninput="resetBackground()" />
+    <input type="text" id="answer" placeholder="Type both names..." oninput="resetState()" />
     <br>
     <button class="submit-btn" onclick="checkAnswer()">Submit</button>
 
     <p id="message"></p>
 
-    <div class="clue-box">
+    <div class="clue-container">
       <button class="clue-button" onclick="showClue()">CLUE: RENDU PER kku support kku ponan</button>
     </div>
   </div>
@@ -138,7 +145,7 @@
         localStorage.setItem("level", 4); // ✅ Unlock Level 4
 
         setTimeout(() => {
-          window.location.href = "level4.html"; // Update this when level 4 is ready
+          window.location.href = "level4.html"; // Update if your level 4 file name is different
         }, 2000);
       } else {
         document.body.style.backgroundColor = "red";
@@ -146,7 +153,7 @@
       }
     }
 
-    function resetBackground() {
+    function resetState() {
       document.body.style.backgroundColor = "black";
       document.getElementById("message").textContent = "";
     }
