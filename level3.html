@@ -3,48 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <title>Level 3 | Mookie Quest</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
       box-sizing: border-box;
     }
 
     body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
+      background-color: black;
+      color: white;
+      font-family: 'Arial', sans-serif;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       transition: background-color 0.3s ease;
     }
 
     .container {
-      text-align: center;
-      padding: 20px;
+      background-color: #8B0000;
+      padding: 30px;
+      border-radius: 12px;
       max-width: 800px;
-      width: 100%;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
     }
 
     h2 {
-      font-size: 20px;
+      font-size: 18px;
       margin-bottom: 20px;
     }
 
     input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
       width: 80%;
       max-width: 400px;
-      border-radius: 6px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
       border: none;
-      outline: none;
-      margin-bottom: 15px;
+      margin: 10px 0;
     }
 
     .submit-btn {
@@ -52,7 +53,7 @@
       font-size: 16px;
       font-weight: bold;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       background-color: white;
       color: black;
@@ -63,23 +64,22 @@
     }
 
     #message {
-      margin-top: 10px;
-      font-weight: bold;
+      margin-top: 15px;
       color: yellow;
+      font-weight: bold;
     }
 
-    .clue-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 30px;
+    .clue-box {
+      margin-top: 25px;
     }
 
     .clue-button {
-      background-color: #e60000;
+      background-color: red;
       color: white;
       border: none;
-      border-radius: 6px;
       padding: 10px 18px;
+      font-size: 14px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
@@ -92,21 +92,16 @@
         font-size: 16px;
       }
 
-      input[type="text"],
+      input,
       .submit-btn {
         font-size: 14px;
-      }
-
-      .clue-button {
-        font-size: 13px;
-        padding: 8px 12px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🔒 Level Access Protection -->
+  <!-- 🔐 Access Protection -->
   <script>
     if (parseInt(localStorage.getItem("level")) < 3) {
       alert("You must complete Level 2 first!");
@@ -116,18 +111,18 @@
 
   <div class="container">
     <h2>
-      NAN HANISHA KITA PESNA NAL IRUNTHHU PERIYA SANDA LAM VANTHATHU ILLA<br>
-      ANA ORU NAL VANTHUCHU ATHANALA THAN EN NELAMA IPDI IRUKKU<br>
-      (YAR ANTHA TWO PERSON)
+      NAN HANISHA KITA PESNA NAL IRUNTHHU PERIYA SANDA LAM VANTHATHU<br />
+      ILLA ANA ORU NAL VANTHUCHU ATHANALA THAN EN NELAMA IPDI IRUKKU<br />
+      <strong>(YAR ANTHA TWO PERSON)</strong>
     </h2>
 
-    <input type="text" id="answer" placeholder="Type both names..." oninput="resetState()" />
-    <br>
+    <input type="text" id="answer" placeholder="Type both names..." oninput="resetBackground()" />
+    <br />
     <button class="submit-btn" onclick="checkAnswer()">Submit</button>
 
     <p id="message"></p>
 
-    <div class="clue-container">
+    <div class="clue-box">
       <button class="clue-button" onclick="showClue()">CLUE: RENDU PER kku support kku ponan</button>
     </div>
   </div>
@@ -142,10 +137,10 @@
       if (input === correctAnswer) {
         document.body.style.backgroundColor = "green";
         message.textContent = "Correct! Moving to Level 4...";
-        localStorage.setItem("level", 4); // ✅ Unlock Level 4
+        localStorage.setItem("level", 4); // Unlock Level 4
 
         setTimeout(() => {
-          window.location.href = "level4.html"; // Update if your level 4 file name is different
+          window.location.href = "level4.html";
         }, 2000);
       } else {
         document.body.style.backgroundColor = "red";
@@ -153,7 +148,7 @@
       }
     }
 
-    function resetState() {
+    function resetBackground() {
       document.body.style.backgroundColor = "black";
       document.getElementById("message").textContent = "";
     }
