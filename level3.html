@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Level 3 - Mookie Quest</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Level 3 | Mookie Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     * {
       box-sizing: border-box;
@@ -11,155 +12,149 @@
 
     body {
       background-color: black;
-      color: #00ffff;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
+      color: white;
+      font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
-      text-align: center;
+      margin: 0;
+      padding: 20px;
+      transition: background-color 0.3s ease;
     }
 
     .container {
-      max-width: 90%;
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
       padding: 20px;
-      background-color: #1a1a1a;
-      border: 2px solid red;
-      border-radius: 10px;
     }
 
     h2 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: red;
+      margin-top: 30px;
+      font-size: 18px;
     }
 
     input[type="text"] {
-      padding: 12px;
+      padding: 10px;
+      font-size: 16px;
       width: 80%;
       max-width: 400px;
-      margin: 15px 0;
-      border: 2px solid #00ffff;
       border-radius: 8px;
-      font-size: 16px;
-      background-color: black;
-      color: #00ffff;
+      border: none;
+      margin: 15px 0;
     }
 
-    button {
+    .submit-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: white;
+      color: black;
+    }
+
+    .submit-btn:hover {
+      background-color: #ddd;
+    }
+
+    #message {
+      margin-top: 10px;
+      color: yellow;
+      font-weight: bold;
+    }
+
+    .clue-box {
+      margin-top: 30px;
+      padding: 10px;
+    }
+
+    .clue-button {
       padding: 10px 16px;
-      margin: 8px;
+      font-size: 14px;
+      background-color: red;
+      color: white;
       border: none;
       border-radius: 6px;
-      font-weight: bold;
       cursor: pointer;
     }
 
-    .clue-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 15px;
-    }
-
-    .clue-buttons button {
-      background-color: #333;
-      color: white;
-      font-size: 12px;
-    }
-
-    .clue-buttons button.correct {
-      background-color: darkblue;
-    }
-
-    .clue-text {
-      margin-top: 10px;
-      font-style: italic;
-      color: yellow;
+    .clue-button:hover {
+      background-color: darkred;
     }
 
     @media (max-width: 600px) {
-      input[type="text"] {
-        width: 95%;
-      }
-
       h2 {
-        font-size: 18px;
+        font-size: 16px;
       }
 
-      .clue-buttons button {
-        font-size: 10px;
-        margin: 4px;
+      input,
+      .submit-btn {
+        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- 🔒 Level Access Protection -->
+  <script>
+    if (parseInt(localStorage.getItem("level")) < 3) {
+      alert("You must complete Level 2 first!");
+      window.location.href = "index.html";
+    }
+  </script>
+
   <div class="container">
-    <h2>NAN HANISHA KITA PESNA NAL IRUNTHHU PERIYA SANDA LAM VANTHATHU ILLA ANA ORU NAL VANTHUCHU<br>ATHANALA THAN EN NELAMA IPDI IRUKKU (YAR ANTHA TWO PERSON)</h2>
+    <h2>
+      NAN HANISHA KITA PESNA NAL IRUNTHHU PERIYA SANDA LAM VANTHATHU ILLA ANA ORU NAL VANTHUCHU<br>
+      ATHANALA THAN EN NELAMA IPDI IRUKKU (YAR ANTHA TWO PERSON)
+    </h2>
 
-    <input type="text" id="answer" placeholder="Type your answer..." oninput="resetBackground()" />
-    <br />
-    <button onclick="checkAnswer()">Submit</button>
+    <input type="text" id="answer" placeholder="Type both names..." oninput="resetBackground()" />
+    <br>
+    <button class="submit-btn" onclick="checkAnswer()">Submit</button>
 
-    <div class="clue-text" id="clueText"></div>
+    <p id="message"></p>
 
-    <div class="clue-buttons" id="clueButtons"></div>
+    <div class="clue-box">
+      <button class="clue-button" onclick="showClue()">CLUE: RENDU PER kku support kku ponan</button>
+    </div>
   </div>
 
   <script>
     const correctAnswer = "poovarasan,pooja";
-    const clueButtonCount = 100;
-    const correctClueIndex = 71;
-    const clueText = "RENDUPER kku support kku ponan";
-
-    const clueContainer = document.getElementById("clueButtons");
-    const clueDisplay = document.getElementById("clueText");
-
-    // Generate 100 clue buttons
-    for (let i = 1; i <= clueButtonCount; i++) {
-      const btn = document.createElement("button");
-      btn.innerText = `Clue ${i}`;
-      btn.onclick = () => {
-        if (i === correctClueIndex) {
-          clueDisplay.innerText = clueText;
-        } else {
-          const fakeIndex = (i + 13) % 100 + 1;
-          clueDisplay.innerText = `Go check Clue ${fakeIndex}`;
-        }
-      };
-      clueContainer.appendChild(btn);
-    }
 
     function checkAnswer() {
-      const userAns = document.getElementById("answer").value.trim().toLowerCase();
-      if (userAns === correctAnswer) {
+      const input = document.getElementById("answer").value.trim().toLowerCase();
+      const message = document.getElementById("message");
+
+      if (input === correctAnswer) {
         document.body.style.backgroundColor = "green";
+        message.textContent = "Correct! Moving to Level 4...";
+        localStorage.setItem("level", 4); // ✅ Unlock Level 4
+
         setTimeout(() => {
-          localStorage.setItem("level", 4); // unlock level 4
-          window.location.href = "level4.html";
-        }, 1500);
+          window.location.href = "level4.html"; // Update this when level 4 is ready
+        }, 2000);
       } else {
         document.body.style.backgroundColor = "red";
+        message.textContent = "Wrong answer! Try again.";
       }
     }
 
     function resetBackground() {
       document.body.style.backgroundColor = "black";
+      document.getElementById("message").textContent = "";
     }
 
-    // Login guard
-    const isLoggedIn = localStorage.getItem("loggedIn");
-    const userLevel = parseInt(localStorage.getItem("level")) || 1;
-
-    if (!isLoggedIn || userLevel < 3) {
-      alert("You haven't unlocked Level 3 yet!");
-      window.location.href = "index.html";
+    function showClue() {
+      alert("Clue: RENDU PER kku support kku ponan");
     }
   </script>
+
 </body>
 </html>
