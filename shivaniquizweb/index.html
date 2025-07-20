@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mookie Quest - Levels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #00ffff;
+      text-align: center;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .level-button {
+      padding: 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      color: black;
+      background-color: #00ffff;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    .level-button:disabled {
+      background-color: grey;
+      color: #333;
+      cursor: not-allowed;
+    }
+
+    .level-button:hover:not(:disabled) {
+      transform: scale(1.1);
+    }
+
+    .logout-btn {
+      margin-top: 40px;
+      padding: 10px 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 Mookie Quest - Select Your Level</h1>
+
+  <div class="level-grid" id="levelGrid">
+    <!-- Level buttons will be inserted here -->
+  </div>
+
+  <button class="logout-btn" onclick="logout()">Logout</button>
+
+  <script>
+    const maxLevels = 10;
+
+    // Check login status
+    const loggedIn = localStorage.getItem("loggedIn");
+    if (!loggedIn || loggedIn !== "true") {
+      window.location.href = "login.html";
+    }
+
+    const unlockedLevel = parseInt(localStorage.getItem("level")) || 1;
+    const levelGrid = document.getElementById("levelGrid");
+
+    for (let i = 1; i <= maxLevels; i++) {
+      const button = document.createElement("button");
+      button.innerText = `Level ${i}`;
+      button.className = "level-button";
+      button.disabled = i > unlockedLevel;
+      button.onclick = () => {
+        window.location.href = `level${i}.html`;
+      };
+      levelGrid.appendChild(button);
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("level");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

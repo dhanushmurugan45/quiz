@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Level 4 | Mookie Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      text-align: center;
+      max-width: 800px;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    #answer {
+      padding: 10px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    #message {
+      margin: 10px 0;
+      color: yellow;
+      font-weight: bold;
+    }
+
+    .clue-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 900px;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .clue-button {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s, opacity 0.3s;
+      min-width: 80px;
+    }
+
+    .clicked {
+      opacity: 0.5;
+    }
+
+    .feedback-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 9999;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .clue-button {
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔐 Level Access -->
+  <script>
+    if (parseInt(localStorage.getItem("level")) < 4) {
+      alert("You must complete Level 3 first!");
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- 🔊 Audio Elements -->
+  <audio id="bgmusic" loop autoplay>
+    <source src="shivaudio.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="correctSound" src="un_vizhigalil_intro (1).mp3"></audio>
+  <audio id="wrongSound" src="evil-laugh-89423.mp3"></audio>
+
+  <!-- ✅ Feedback Images -->
+  <img src="shhivedit.jpg" id="correctImg" class="feedback-image" />
+  <img src="wrong img.jpg" id="wrongImg" class="feedback-image" />
+
+  <!-- 🔍 Quiz Content -->
+  <h2>
+    ENGA COLLEGE BEAUTY QUEEN THUMIYA AAL INSTA ID YUM AVAN AAL INSTA ID YUM SOLLU
+  </h2>
+
+  <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:10px;">
+    <input type="text" id="answer" placeholder="Type your answer here" oninput="reset()" />
+    <button id="submitBtn" style="padding:10px 18px;font-size:16px;border-radius:8px;border:none;background:#4d94ff;color:white;font-weight:bold;cursor:pointer;">Submit</button>
+  </div>
+
+  <p id="message"></p>
+
+  <div class="clue-grid" id="clueContainer"></div>
+
+  <!-- 🔁 Script -->
+  <script>
+    const correctAnswer = "meowmusu,meowthasu";
+    const correctImg = document.getElementById("correctImg");
+    const wrongImg = document.getElementById("wrongImg");
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+    const message = document.getElementById("message");
+
+    function reset() {
+      correctImg.style.display = "none";
+      wrongImg.style.display = "none";
+      message.textContent = "";
+    }
+
+    function checkAnswer() {
+      const input = document.getElementById("answer").value.trim().toLowerCase();
+
+      if (input === correctAnswer) {
+        correctImg.style.display = "block";
+        correctSound.play();
+        message.textContent = "Correct! Moving to Reward Page...";
+
+        correctSound.onended = () => {
+          localStorage.setItem("level", 5);
+          window.location.href = "rewardmid.html"; // Redirect to reward
+        };
+      } else {
+        wrongImg.style.display = "block";
+        wrongSound.play();
+        message.textContent = "Wrong answer! Try again.";
+
+        setTimeout(() => {
+          wrongImg.style.display = "none";
+        }, 2000);
+      }
+    }
+
+    document.getElementById("answer").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") checkAnswer();
+    });
+
+    document.getElementById("submitBtn").addEventListener("click", checkAnswer);
+
+    // 🎨 Clue System
+    const gradients = [
+      "#ff4d4d", "#ff944d", "#ffc34d", "#ffff4d",
+      "#c6ff4d", "#85ff4d", "#4dff88", "#4dffc3",
+      "#4dffff", "#4dd2ff", "#4d94ff", "#4d4dff",
+      "#944dff", "#c34dff", "#ff4dff", "#ff4dd2"
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function generateClues() {
+      const container = document.getElementById("clueContainer");
+      const buttons = [];
+
+      for (let i = 0; i < 100; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = `Clue ${i + 1}`;
+        btn.className = "clue-button";
+        btn.style.backgroundColor = gradients[i % gradients.length];
+
+        btn.addEventListener("click", () => {
+          if (!btn.classList.contains("clicked")) {
+            btn.classList.add("clicked");
+
+            if (i === 66) {
+              alert("Clue 67: cat");
+            } else {
+              alert("No clue.");
+            }
+
+            shuffle(buttons);
+            container.innerHTML = "";
+            buttons.forEach(b => container.appendChild(b));
+          }
+        });
+
+        buttons.push(btn);
+      }
+
+      buttons.forEach(b => container.appendChild(b));
+    }
+
+    generateClues();
+  </script>
+</body>
+</html>

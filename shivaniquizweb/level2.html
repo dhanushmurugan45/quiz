@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Level 2 | Mookie Quest</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      font-family: Arial, sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      max-width: 1200px;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .clues-column {
+      width: 25%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .clues-column button {
+      flex: 1 0 30%;
+      padding: 8px;
+      font-size: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background-color: hsl(calc(360 * var(--i) / 100), 70%, 60%);
+    }
+
+    .quiz-box {
+      flex: 1;
+      text-align: center;
+      padding: 20px;
+      max-width: 500px;
+    }
+
+    .quiz-box h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      font-size: 16px;
+      width: 90%;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #clue-display {
+      margin-top: 15px;
+      font-size: 14px;
+      color: yellow;
+      min-height: 40px;
+    }
+
+    .feedback-media {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 999;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 20px 10px;
+      }
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .clues-column {
+        width: 100%;
+        flex-wrap: wrap;
+        flex-direction: row;
+        gap: 5px;
+      }
+      .quiz-box {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🎯 Visual Feedback -->
+  <img id="right-img" class="feedback-media" src="shhivedit.jpg" alt="Correct!" />
+  <img id="wrong-img" class="feedback-media" src="wrong img.jpg" alt="Wrong!" />
+
+  <!-- 🔊 Audio -->
+  <audio id="correct-audio" src="un_vizhigalil_intro (1).mp3"></audio>
+  <audio id="wrong-audio" src="evil-laugh-89423.mp3"></audio>
+  <audio id="bg-audio" src="shivaudio.mp3" autoplay></audio>
+
+  <div class="container">
+    <div class="clues-column" id="left-clues"></div>
+    <div class="quiz-box">
+      <h2>
+        INTHA STORY EN LIFE EEH MATHIRUCHU ITHUKKU APRM THAN NAN NALLA IRUNTHAN,<br>
+        LALITA IRUKKA ENAKKU AVALA PUDIKKUM, YEN NU UNAKKE THERIYUM<br>
+        AVA ENKOODA 1 WEEK THAN PESUNA APRM FIGHT , YEN ANTHA FIGHT ONE WORD DEFINE PANNU
+      </h2>
+      <input type="text" id="answer" placeholder="Type your answer here" oninput="resetBackground()">
+      <div id="clue-display"></div>
+    </div>
+    <div class="clues-column" id="right-clues"></div>
+  </div>
+
+  <script>
+  const correctAnswer = "cringe boy";
+  const totalButtons = 100;
+  const clueTexts = Array.from({ length: 100 }, (_, i) => i === 66 ? "cat" : "no clue");
+
+  const leftClues = document.getElementById("left-clues");
+  const rightClues = document.getElementById("right-clues");
+  const clueDisplay = document.getElementById("clue-display");
+  const answerInput = document.getElementById("answer");
+
+  const rightImg = document.getElementById("right-img");
+  const wrongImg = document.getElementById("wrong-img");
+
+  const correctAudio = document.getElementById("correct-audio");
+  const wrongAudio = document.getElementById("wrong-audio");
+  const bgAudio = document.getElementById("bg-audio");
+
+  bgAudio.loop = true;
+  bgAudio.volume = 0.4;
+  bgAudio.play().catch(() => {}); // Autoplay safeguard
+
+  function resetBackground() {
+    document.body.style.backgroundColor = "black";
+    rightImg.style.display = "none";
+    wrongImg.style.display = "none";
+  }
+
+  function resumeBgAfter(audio) {
+    audio.onended = () => {
+      bgAudio.play().catch(() => {});
+    };
+  }
+
+  answerInput.addEventListener("keyup", function (event) {
+    const userAnswer = answerInput.value.trim().toLowerCase();
+    if (userAnswer === "") {
+      resetBackground();
+      return;
+    }
+
+    if (event.key === "Enter") {
+      bgAudio.pause();
+      bgAudio.currentTime = 0;
+
+      if (userAnswer === correctAnswer) {
+        correctAudio.play();
+        rightImg.style.display = "block";
+        document.body.style.backgroundColor = "green";
+        localStorage.setItem("level", 3);
+
+        correctAudio.onended = () => {
+          window.location.href = "level3.html";
+        };
+      } else {
+        wrongAudio.play();
+        wrongImg.style.display = "block";
+        document.body.style.backgroundColor = "red";
+
+        setTimeout(() => {
+          resetBackground();
+          bgAudio.play().catch(() => {});
+        }, 3000);
+      }
+    }
+  });
+
+  // Generate Clue Buttons
+  for (let i = 0; i < totalButtons; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = `Clue ${i + 1}`;
+    btn.style.setProperty('--i', i);
+    btn.onclick = () => {
+      clueDisplay.textContent = clueTexts[i];
+    };
+    if (i < totalButtons / 2) {
+      leftClues.appendChild(btn);
+    } else {
+      rightClues.appendChild(btn);
+    }
+  }
+</script>
+</body>
+</html>

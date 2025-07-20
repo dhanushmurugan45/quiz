@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Get Ready | Mookie Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 20px;
+      max-width: 700px;
+      padding: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .loader {
+      margin-top: 30px;
+      border: 6px solid #333;
+      border-top: 6px solid #ffcc00;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .note {
+      font-size: 14px;
+      margin-top: 20px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>
+    reward pudichirukka 🎉<br>
+    innum songs lam loop la odum...<br>
+    wait pannu ipo ne adutha level kku pooh
+    now the after reward add gesture page 
+    keela scroll panna oru button irukathu after 30 sec kku aprm poirum  🎶
+  </h1>
+
+  <div class="loader"></div>
+
+  <script>
+    setTimeout(function () {
+      window.location.href = "level5.html"; // change filename if needed
+    }, 30000); // 30 seconds
+  </script>
+
+</body>
+</html>
