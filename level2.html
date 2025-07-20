@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +18,9 @@
       align-items: center;
       height: 100vh;
       flex-wrap: wrap;
+      position: relative;
     }
+
     .container {
       display: flex;
       flex-direction: row;
@@ -28,6 +29,7 @@
       justify-content: space-between;
       padding: 10px;
     }
+
     .clues-column {
       width: 25%;
       display: flex;
@@ -35,6 +37,7 @@
       gap: 6px;
       justify-content: center;
     }
+
     .clues-column button {
       flex: 1 0 30%;
       padding: 8px;
@@ -44,16 +47,19 @@
       cursor: pointer;
       background-color: hsl(calc(360 * var(--i) / 100), 70%, 60%);
     }
+
     .quiz-box {
       flex: 1;
       text-align: center;
       padding: 20px;
       max-width: 500px;
     }
+
     .quiz-box h2 {
       margin-bottom: 20px;
       font-size: 20px;
     }
+
     input[type="text"] {
       padding: 12px;
       font-size: 16px;
@@ -61,12 +67,25 @@
       border-radius: 8px;
       border: none;
     }
+
     #clue-display {
       margin-top: 15px;
       font-size: 14px;
       color: yellow;
       min-height: 40px;
     }
+
+    .feedback-media {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 999;
+      display: none;
+    }
+
     @media (max-width: 768px) {
       body {
         flex-direction: column;
@@ -90,6 +109,15 @@
   </style>
 </head>
 <body>
+  <!-- 🎯 Visual Feedback -->
+  <img id="right-img" class="feedback-media" src="image.png" alt="Correct!" />
+  <img id="wrong-img" class="feedback-media" src="wrong img.jpg" alt="Wrong!" />
+
+  <!-- 🔊 Audio -->
+  <audio id="correct-audio" src="un_vizhigalil_intro (1).mp3"></audio>
+  <audio id="wrong-audio" src="evil-laugh-89423.mp3"></audio>
+  <audio id="bg-audio" src="shivaudio.mp3" autoplay></audio>
+
   <div class="container">
     <div class="clues-column" id="left-clues"></div>
     <div class="quiz-box">
@@ -103,147 +131,87 @@
     </div>
     <div class="clues-column" id="right-clues"></div>
   </div>
+
   <script>
-    const correctAnswer = "cringe boy";
-    const totalButtons = 100;
-    const clueTexts = [
-  "Clue 1: [vaa di va vera clue paru]",
-  "Clue 2: [vera clue vera poi thedanum line aaah illa ethukkum 69 la paru]",
-  "Clue 3: [vera clue podi]",
-  "Clue 4: [vadi en thangamey clue venumaah]",
-  "Clue 5: [five la onnum irukathu]",
-  "Clue 6: [five laya illa 6 mattum]",
-  "Clue 7: [ana 7 apdi illa]",
-  "Clue 8: [8 la twist irukum, yosichu paru]",
-  "Clue 9: [clue ah kekuravan kitta clue illa]",
-  "Clue 10: [intha 10 la number illa, but clue iruku]",
-  "Clue 11: [run panra clue, catch pannipa]",
-  "Clue 12: [12 la clue irukura mathiri irukum, but illa]",
-  "Clue 13: [intha clue superstitious illa, normal]",
-  "Clue 14: [nee sonna mari clue thaan]",
-  "Clue 15: [oru 5 clue ah join panni paru]",
-  "Clue 16: [intha clue oru secret mathiri]",
-  "Clue 17: [intha clue oru dream la vandhuchu]",
-  "Clue 18: [clue ku mela clue nu peru podanum]",
-  "Clue 19: [clue iruku, aana nee ready ah illa]",
-  "Clue 20: [oru clue illa na clue ah vechu clue solla mudiyum]",
-  "Clue 21: [intha clue ah decode panna daan next level]",
-  "Clue 22: [ethukuda 22 la clue kekreenga, adhu vera level]",
-  "Clue 23: [23 la vanthachu clue, but it's hiding]",
-  "Clue 24: [oru naal clue um pesaama poi irundhuchu]",
-  "Clue 25: [idhu half-century ku arambam]",
-  "Clue 26: [enga kitta clue nu kaekatha, clue dhan kaekum]",
-  "Clue 27: [intha clue kuda oru clue ku clue ah irukum]",
-  "Clue 28: [kadhal illa daan, clue dhaan]",
-  "Clue 29: [oru double meaning clue idhu]",
-  "Clue 30: [nee yosicha clue visible aagum]",
-  "Clue 31: [intha clue thaan unga naal la twist podum]",
-  "Clue 32: [oru clue illa, oru vazhi]",
-  "Clue 33: [33 la clue fulla kodumai]",
-  "Clue 34: [clue ah kaeta piragu than puriyum]",
-  "Clue 35: [intha clue ah eppadiyum miss pannidaatha]",
-  "Clue 36: [oru mathiri clue thaan idhu, paathu yosikkanum]",
-  "Clue 37: [intha clue unga frnd kitta kudukkala]",
-  "Clue 38: [verithanama yosicha clue theriyum]",
-  "Clue 39: [intha clue ah padikumbodhey chill aagum]",
-  "Clue 40: [oru game la win panna clue thevai]",
-  "Clue 41: [intha clue oru flashback]",
-  "Clue 42: [clue iruku aana clue maari illa]",
-  "Clue 43: [siriya clue, aana meaning deep]",
-  "Clue 44: [oru song lyric la clue iruku]",
-  "Clue 45: [intha clue romba silent ah irukum]",
-  "Clue 46: [clue ah yosika time edukka kudathu]",
-  "Clue 47: [oru murai clue vandha athu vazhi kattum]",
-  "Clue 48: [clue illa na nee thaan clue]",
-  "Clue 49: [intha clue password maari irukum]",
-  "Clue 50: [clue la clue illa, click pannu theriyum]",
-  "Clue 51: [entha clue na summava, mid game booster]",
-  "Clue 52: [intha clue apdiye mind blow aagum]",
-  "Clue 53: [clue la sirippu irukum, yosichu paakalam]",
-  "Clue 54: [intha clue only legends understand]",
-  "Clue 55: [clue kuduthutu clue illa nu sollanum]",
-  "Clue 56: [intha clue enna paathaa bored ah aagathu]",
-  "Clue 57: [clue kekama continue pannuna kashtam]",
-  "Clue 58: [intha clue oru vadivelu scene inspired]",
-  "Clue 59: [intha clue la oru game hint irukum]",
-  "Clue 60: [oru chinna word clue la romba mukkiyam]",
-  "Clue 61: [entha clue ah open panna password kekum]",
-  "Clue 62: [intha clue la twist irukum, yosippa vera vishayam]",
-  "Clue 63: [nee paatha clue maari theriyadhu]",
-  "Clue 64: [oru chinna sound clue kudukum]",
-  "Clue 65: [intha clue only 90s kids will get]",
-  "Clue 66: [intha clue la English/Tamil mix irukum]",
-  "Clue 67: [clue ah kaeta appadiye logic break aagum]",
-  "Clue 68: [oru murai yosicha puriyum clue]",
-  "Clue 69: [69 la clue, aana safe clue]",
-  "Clue 70: [intha clue unga face la smile varum]",
-  "Clue 71: [intha clue oru old movie la irukum]",
-  "Clue 72: [clue solli clue ah marakkama irukanum]",
-  "Clue 73: [nee yosikra madiri illa clue]",
-  "Clue 74: [intha clue future la use aagum]",
-  "Clue 75: [oru secret door clue idhu]",
-  "Clue 76: [clue la suspense irukum]",
-  "Clue 77: [intha clue oru trend follow pannum]",
-  "Clue 78: [clue sollanum na nee ready ah irukanum]",
-  "Clue 79: [intha clue un pakkathula dhan irukum]",
-  "Clue 80: [oru viral line clue idhu]",
-  "Clue 81: [intha clue unga team kitta kuduthu yosika sollunga]",
-  "Clue 82: [clue la song title irukum]",
-  "Clue 83: [intha clue double tap pannuna clue theriyum]",
-  "Clue 84: [oru image la irundha clue]",
-  "Clue 85: [intha clue only meme lords ku puriyum]",
-  "Clue 86: [intha clue like oru reel caption]",
-  "Clue 87: [clue la oru ponnu peru irukum]",
-  "Clue 88: [intha clue puzzle maari irukum]",
-  "Clue 89: [intha clue read panna chill varum]",
-  "Clue 90: [intha clue un thalaivaru sonna maari irukum]",
-  "Clue 91: [intha clue un kanavula varum]",
-  "Clue 92: [intha clue la location hidden irukum]",
-  "Clue 93: [intha clue phone ringtone maari irukum]",
-  "Clue 94: [intha clue la mathiri clue illa]",
-  "Clue 95: [intha clue pesama help pannum]",
-  "Clue 96: [intha clue seekiram click panna theriyum]",
-  "Clue 97: [intha clue vera level acting]",
-  "Clue 98: [intha clue la intro music irukum]",
-  "Clue 99: [intha clue missing part mathiri irukum]",
-  "Clue 100: [intha last clue la surprise irukum, ready ah iru]"
-    ];
-    const leftClues = document.getElementById("left-clues");
-    const rightClues = document.getElementById("right-clues");
-    const clueDisplay = document.getElementById("clue-display");
-    const answerInput = document.getElementById("answer");
-    function resetBackground() {
-      document.body.style.backgroundColor = "black";
+  const correctAnswer = "cringe boy";
+  const totalButtons = 100;
+  const clueTexts = Array.from({ length: 100 }, (_, i) => i === 66 ? "cat" : "no clue");
+
+  const leftClues = document.getElementById("left-clues");
+  const rightClues = document.getElementById("right-clues");
+  const clueDisplay = document.getElementById("clue-display");
+  const answerInput = document.getElementById("answer");
+
+  const rightImg = document.getElementById("right-img");
+  const wrongImg = document.getElementById("wrong-img");
+
+  const correctAudio = document.getElementById("correct-audio");
+  const wrongAudio = document.getElementById("wrong-audio");
+  const bgAudio = document.getElementById("bg-audio");
+
+  bgAudio.loop = true;
+  bgAudio.volume = 0.4;
+  bgAudio.play().catch(() => {}); // Autoplay safeguard
+
+  function resetBackground() {
+    document.body.style.backgroundColor = "black";
+    rightImg.style.display = "none";
+    wrongImg.style.display = "none";
+  }
+
+  function resumeBgAfter(audio) {
+    audio.onended = () => {
+      bgAudio.play().catch(() => {});
+    };
+  }
+
+  answerInput.addEventListener("keyup", function (event) {
+    const userAnswer = answerInput.value.trim().toLowerCase();
+    if (userAnswer === "") {
+      resetBackground();
+      return;
     }
-    answerInput.addEventListener("keyup", function (event) {
-      const userAnswer = answerInput.value.trim().toLowerCase();
-      if (userAnswer === "") {
-        document.body.style.backgroundColor = "black";
-      }
-      if (event.key === "Enter") {
-        if (userAnswer === correctAnswer) {
-          document.body.style.backgroundColor = "green";
-          // ✅ UNLOCK LEVEL 3
-          localStorage.setItem("level", 3);
+
+    if (event.key === "Enter") {
+      bgAudio.pause();
+      bgAudio.currentTime = 0;
+
+      if (userAnswer === correctAnswer) {
+        correctAudio.play();
+        rightImg.style.display = "block";
+        document.body.style.backgroundColor = "green";
+        localStorage.setItem("level", 3);
+
+        correctAudio.onended = () => {
           window.location.href = "level3.html";
-        } else {
-          document.body.style.backgroundColor = "red";
-        }
-      }
-    });
-    for (let i = 0; i < totalButtons; i++) {
-      const btn = document.createElement("button");
-      btn.textContent = `Clue ${i + 1}`;
-      btn.style.setProperty('--i', i);
-      btn.onclick = () => {
-        clueDisplay.textContent = clueTexts[i];
-      };
-      if (i < totalButtons / 2) {
-        leftClues.appendChild(btn);
+        };
       } else {
-        rightClues.appendChild(btn);
+        wrongAudio.play();
+        wrongImg.style.display = "block";
+        document.body.style.backgroundColor = "red";
+
+        setTimeout(() => {
+          resetBackground();
+          bgAudio.play().catch(() => {});
+        }, 3000);
       }
     }
-  </script>
+  });
+
+  // Generate Clue Buttons
+  for (let i = 0; i < totalButtons; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = `Clue ${i + 1}`;
+    btn.style.setProperty('--i', i);
+    btn.onclick = () => {
+      clueDisplay.textContent = clueTexts[i];
+    };
+    if (i < totalButtons / 2) {
+      leftClues.appendChild(btn);
+    } else {
+      rightClues.appendChild(btn);
+    }
+  }
+</script>
 </body>
 </html>
