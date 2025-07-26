@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Level 5 | Mookie Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background: url('https://i.pinimg.com/originals/26/5a/cc/265acc2d90e31d4ea7822b7fada5da54.jpg') no-repeat center center fixed, black;
+      background-size: cover;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .center-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      width: 100vw;
+    }
+
+    h2 {
+      text-align: center;
+      max-width: 800px;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    #answer {
+      padding: 10px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    #message {
+      margin: 10px 0;
+      color: yellow;
+      font-weight: bold;
+    }
+
+    .feedback-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 9999;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      h2 {
+        font-size: 16px;
+      }
+
+      #answer {
+        font-size: 14px;
+      }
+    }
+
+    #submitBtn {
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #4d94ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔐 Level Access -->
+  <script>
+    if (parseInt(localStorage.getItem("level")) < 5) {
+      alert("You must complete Level 4 first!");
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- 🔊 Audio Elements -->
+  <audio id="bgmusic" loop autoplay>
+    <source src="shivaudio.mp3" type="audio/mpeg" />
+  </audio>
+
+  <audio id="correctSound" src="un_vizhigalil_intro (1).mp3"></audio>
+  <audio id="wrongSound" src="evil-laugh-89423.mp3"></audio>
+
+  <!-- ✅ Feedback Images -->
+  <img src="shhivedit.jpg" id="correctImg" class="feedback-image" />
+  <img src="wrong img.jpg" id="wrongImg" class="feedback-image" />
+
+  <div class="center-box">
+    <h2>
+      UNKITA SONNA MOVIE THAN INGA ANSWER AAH IRUKKANUM, ENNODA FAVOURITE MOVIE UNKITTA SONNATHU THAN
+    </h2>
+    <form id="answerForm" style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <label style="color:white;font-weight:bold;">1. <input type="text" class="movie-input" placeholder="Movie 1" autocomplete="off" /></label>
+        <label style="color:white;font-weight:bold;">2. <input type="text" class="movie-input" placeholder="Movie 2" autocomplete="off" /></label>
+        <label style="color:white;font-weight:bold;">3. <input type="text" class="movie-input" placeholder="Movie 3" autocomplete="off" /></label>
+        <label style="color:white;font-weight:bold;">4. <input type="text" class="movie-input" placeholder="Movie 4" autocomplete="off" /></label>
+        <label style="color:white;font-weight:bold;">5. <input type="text" class="movie-input" placeholder="Movie 5" autocomplete="off" /></label>
+      </div>
+      <button id="submitBtn" type="submit">Submit</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <!-- 🔁 Logic -->
+  <script>
+    const acceptedAnswers = [
+      "hey raam",
+      "arjun reddy",
+      "vada chennai",
+      "thevar magan",
+      "vella illa pattadhari"
+    ];
+
+    const correctImg = document.getElementById("correctImg");
+    const wrongImg = document.getElementById("wrongImg");
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+    const bgmusic = document.getElementById("bgmusic");
+    const message = document.getElementById("message");
+
+    function reset() {
+      correctImg.style.display = "none";
+      wrongImg.style.display = "none";
+      message.textContent = "";
+    }
+
+    function checkAnswer(e) {
+      if (e) e.preventDefault();
+      const inputs = Array.from(document.querySelectorAll('.movie-input'));
+      const userAnswers = inputs.map(inp => inp.value.trim().toLowerCase());
+      const allFilled = userAnswers.every(ans => ans.length > 0);
+      // Stop loop music
+      bgmusic.pause();
+      if (allFilled && userAnswers.every((ans, idx) => ans === acceptedAnswers[idx])) {
+        correctImg.style.display = "block";
+        correctSound.play();
+        message.textContent = "Correct! Moving to Level 6...";
+        correctSound.onended = () => {
+          localStorage.setItem("level", 6);
+          window.location.href = "level6.html";
+        };
+      } else {
+        wrongImg.style.display = "block";
+        wrongSound.play();
+        message.textContent = "Wrong answer! Try again.";
+        setTimeout(() => {
+          wrongImg.style.display = "none";
+          bgmusic.play();
+        }, 2000);
+      }
+    }
+    document.getElementById("answerForm").addEventListener("submit", checkAnswer);
+    // Enter key on any input triggers submit
+    document.querySelectorAll('.movie-input').forEach(inp => {
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          checkAnswer(e);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
