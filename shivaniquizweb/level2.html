@@ -142,7 +142,7 @@
   const clueDisplay = document.getElementById("clue-display");
   const answerInput = document.getElementById("answer");
 
-  const rightImg = document.getElementById("right-img");
+  const rightImg = document.getElementById("right-img");z
   const wrongImg = document.getElementById("wrong-img");
 
   const correctAudio = document.getElementById("correct-audio");
@@ -178,6 +178,7 @@
 
       if (userAnswer === correctAnswer) {
         correctAudio.play();
+        rightImg.src = "shhivedit.jpg";
         rightImg.style.display = "block";
         document.body.style.backgroundColor = "green";
         localStorage.setItem("level", 3);
